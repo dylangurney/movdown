@@ -155,7 +155,7 @@ async function getvidcloud(prevlink) {
   const r = await axios.get("https://123-movies.vc/ajax/episode/list/" + prevlink.split("-").pop())
   const r1 = r.data
   const linkid = r1.split(`data-linkid="`)[1].split(`"`)[0]
-  const lol2 = await axios.get("https://123-movies.vc/ajax/episode/sources/5417428")
+  const lol2 = await axios.get(`https://123-movies.vc/ajax/episode/sources/${linkid}`)
   return lol2.data.link
 }
 
