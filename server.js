@@ -26,11 +26,20 @@ function parseM3U8(text) {
   return segments;
 }
 
+let downloadprogress = {
+  
+}
+
+app.get("/progress", async (req, res) => {
+   const downloadid = req.query.downloadid
+   res.send(downloadprogress[downloadid] || "")
+});
+
 app.get("/download", async (req, res) => {
   const url = req.query.url;
   const resolution = req.query.res;
   const moviename = req.query.movname
-  
+  const downloadid = req.query.downloadid
   console.log(url)
 
   const idx = await axios.get(url);
@@ -66,6 +75,7 @@ app.get("/download", async (req, res) => {
     clientDisconnected = true;
   });
 
+
   let on = -1
   for (const i of parsed) {
     on += 1
@@ -79,6 +89,7 @@ app.get("/download", async (req, res) => {
 
     try {
       console.log(`Fetching chunk ${on}/${parsed.length}`);
+      downloadprogress[downloadid] = `${on}/${parsed.length}`
       const stream = await downloadChunk(i);
 
       // Check if the client has disconnected before sending data
